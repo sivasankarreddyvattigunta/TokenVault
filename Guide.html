@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide to Change Network</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://i.pinimg.com/originals/c8/61/75/c8617584f5180a47f90de9004ed7afed.gif');
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+            color: white;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+        }
+        .container {
+           
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-width: 1000px;
+            width: 100%;
+        }
+        h1 {
+            text-align: center;
+            color:#2196F3;
+        }
+        h2 {
+            color: #2196F3;
+        }
+        p {
+            margin-bottom: 15px;
+        }
+        .table-container {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #2196F3;
+            text-align: left;
+        }
+        th {
+           background-color: #0a4e85;
+        }
+        td {
+          background-color:black;
+          opacity: 0.8;
+        }
+        .step {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Guide to Change Network</h1>
+
+        <h2>Step-by-Step Instructions</h2>
+        <div class="step">
+            <h3>Step 1: Open MetaMask</h3>
+            <p>Click on the MetaMask extension icon in your browser to open MetaMask.</p>
+        </div>
+        <div class="step">
+            <h3>Step 2: Select Network</h3>
+            <p>Click on the network dropdown at the top of MetaMask. It will display the currently selected network (e.g., Ethereum Mainnet).</p>
+        </div>
+        <div class="step">
+            <h3>Step 3: Add/Change Network</h3>
+            <p>Scroll down to the bottom of the network list and click on "Add Network" to add a new network or "Switch to [Network Name]" to switch to an already added network.</p>
+        </div>
+        <div class="step">
+            <h3>Step 4: Enter Network Details</h3>
+            <p>If you are adding a new network, enter the details provided in the table below. If switching, confirm the switch when prompted.</p>
+        </div>
+
+        <h2>Network Details</h2>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Network</th>
+                        <th>Chain ID</th>
+                        <th>RPC URL</th>
+                        <th>Currency Symbol</th>
+                        <th>Block Explorer URL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Avalanche Fuji</td>
+                        <td>43113</td>
+                        <td>https://api.avax-test.network/ext/bc/C/rpc</td>
+                        <td>AVAX</td>
+                        <td>https://cchain.explorer.avax-test.network/</td>
+                    </tr>
+                    <tr>
+                        <td>Moonbase Alpha</td>
+                        <td>1287</td>
+                        <td>https://rpc.testnet.moonbeam.network</td>
+                        <td>DEV</td>
+                        <td>https://moonbase-blockscout.testnet.moonbeam.network/</td>
+                    </tr>
+                    <tr>
+                        <td>Ethereum Sepolia</td>
+                        <td>11155111</td>
+                        <td>https://sepolia.infura.io/v3/</td>
+                        <td>ETH</td>
+                        <td>https://sepolia.etherscan.io/</td>
+                    </tr>
+                    <tr>
+                        <td>Polygon Amoy</td>
+                        <td>80002</td>
+                        <td>https://rpc-amoy.polygon.technology/</td>
+                        <td>MATIC</td>
+                        <td>https://www.oklink.com/amoy</td>
+                    </tr>
+                    <tr>
+                        <td>Ethereum Holesky</td>
+                        <td>17000</td>
+                        <td>https://ethereum-holesky.publicnode.com</td>
+                        <td>ETH</td>
+                        <td>https://holesky.etherscan.io/</td>
+                    </tr>
+                    <tr>
+                        <td>Optimism Sepolia</td>
+                        <td>11155420</td>
+                        <td>https://sepolia.optimism.io</td>
+                        <td>ETH</td>
+                        <td>https://sepolia-optimism.etherscan.io</td>
+                    </tr>
+                    <tr>
+                        <td>Cronos Testnet</td>
+                        <td>338</td>
+                        <td>https://evm-t3.cronos.org</td>
+                        <td>TCRO</td>
+                        <td>https://explorer.cronos.org/testnet/</td>
+                    </tr>
+                    <tr>
+                        <td>Arbitrum Sepolia</td>
+                        <td>421614</td>
+                        <td>https://arbitrum-sepolia.blockpi.network/v1/rpc/public</td>
+                        <td>ETH</td>
+                        <td>https://sepolia-explorer.arbitrum.io</td>
+                    </tr>
+                    <tr>
+                        <td>BNB Smart Chain Testnet</td>
+                        <td>97</td>
+                        <td>https://bsc-testnet.blockpi.network/v1/rpc/public</td>
+                        <td>tBNB</td>
+                        <td>https://testnet.bscscan.com/</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

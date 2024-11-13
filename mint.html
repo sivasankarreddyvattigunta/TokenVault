@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mint Your NFT</title>
+    <script src="./web3.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: white;
+            background-image: url('https://i.pinimg.com/originals/c8/61/75/c8617584f5180a47f90de9004ed7afed.gif');
+            background-attachment: fixed;
+            background-size: cover;
+        }
+        .container {
+            background: linear-gradient(135deg, #00487d 50%, #0091e9 100%);
+            padding: 30px;
+            border-radius: 10px;
+            width: 400px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: none;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background: linear-gradient(to left, #00487d , #0091e9 );
+            color: black;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+      background: linear-gradient(to right, #00487d , #0091e9 );
+        } 
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Mint Your NFT</h1>
+        <label for="cid">CID (Content Identifier):</label>
+        <input type="text" id="cid" placeholder="Enter CID">
+        
+        <label for="pid">Property ID:</label>
+        <input type="text" id="pid" placeholder="Enter Property ID">
+
+        <label for="nftName">NFT Name:</label>
+        <input type="text" id="nftName" placeholder="Enter NFT Name">
+
+        <label for="price">Price (in Wei):</label>
+        <input type="number" id="price" placeholder="Enter Price in Wei">
+
+        <button onclick="mintNFT()">Mint NFT</button>
+    </div>
+
+    <script>
+        let contract;
+        const web3 = new Web3(window.ethereum); 
+        const contractAddress = "0x17F3480f11B3EAc120479779797A1Be4dcefa59F";
+        async function loadContract() {
+            try {
+                const res = await fetch('./abi.json');
+                const abi = await res.json();
+                contract = new web3.eth.Contract(abi, contractAddress);
+                console.log('Contract loaded successfully');
+            } catch (error) {
+                console.error('Error loading contract ABI:', error);
+                alert('Failed to load contract ABI. Please try again.');
+            }
+        }
+
+        window.onload = async function() {
+            if (window.ethereum) {
+                try {
+                    await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    loadContract();
+                } catch (error) {
+                    console.error('Error connecting to MetaMask:', error);
+                }
+            } else {
+                alert('Please install MetaMask!');
+            }
+        };
+
+        async function mintNFT() {
+            const accounts = await web3.eth.getAccounts();
+            const cid = document.getElementById("cid").value;
+            const pid = document.getElementById("pid").value; 
+            const nftName = document.getElementById("nftName").value;
+            const price = document.getElementById("price").value;
+
+            if (!contract) {
+                alert("Contract not loaded. Please try again later.");
+                return;
+            }
+
+            if (!cid || !price) {
+                alert("Please fill in all the required fields.");
+                return;
+            }
+
+            try {
+                
+               
+                const mintResponse = await contract.methods.mintNFT(cid).send({ from: accounts[0] });
+                const addcid=await contract.methods.addCID(cid).send({ from: accounts[0] });
+                 
+                const tokenId = mintResponse.events.NFTMinted.returnValues.tokenId;
+                alert(`NFT minted successfully with Token ID: ${tokenId}`);
+                alert(`Please take a note of Token ID: ${tokenId}`);
+            } catch (error) {
+                console.error(error);
+                alert("An error occurred while minting the NFT. Please try again.");
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <script src="./web3.min.js"></script>
+    <script src="./jquery.js"></script>
+    <style>
+		
+        body {
+		
+			background-image: url('https://i.pinimg.com/originals/c8/61/75/c8617584f5180a47f90de9004ed7afed.gif');
+			background-attachment: fixed;
+            background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    margin: 0;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        .button-container {
+			margin-left:10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            position: relative;
+	       
+            gap: 25px;
+        }
+        button {
+            width: 15vw;
+            height: 7vh;
+			transform: scale(1.10);
+			transition-duration: 5ms;
+            background: linear-gradient(135deg, #00487d 50%, #0091e9 100%);
+			margin-right: 75vw;
+            background-color: rgb(29, 26, 26);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            opacity: 0.5;
+            position: relative;
+        }
+		@keyframes scaleButton {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+        button:hover {
+            
+            transform: scale(1.07);
+        }
+        button:disabled {
+            cursor: not-allowed;
+        }
+        button.active {
+            opacity: 1;
+			animation: scaleButton 1s infinite;
+        }
+        button.completed {
+            background-color: green;
+            color: white;
+        }
+        button[data-tooltip]:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+      
+        .line {
+			margin-right: 75vw;
+			
+            width: 5px;
+            height: 50px;
+            background-color: white;
+			
+            overflow: hidden;
+        }
+
+        .line .fill {
+            background-color: black;
+            height: 100%;
+            width: 0;
+            animation: fillLine 2s ease-out forwards;
+        }
+		.slide-container {
+            position: absolute;	
+            top: 10%;
+            left: 23%;
+            width: 65%;
+			display: flex;
+            height: 45vh;
+			flex-direction: column;
+            
+            justify-content: center;
+            align-items: center;
+            color: silver;
+            font-size: 50px;
+            font-weight: bold;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .slide {
+            display: none;
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+        }
+        .slide.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .line::after {
+          
+            font-size: 24px;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+			margin-right: 75vw;
+            color: black;
+        }
+
+        .dropdown {
+			
+            position: absolute;
+            right: 5%;
+            top: 5%;
+        }
+        #profilePic {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .dropdown-content {
+			background:linear-gradient(to left, #0091e9 100%,#00487d 0% );
+            display: none;
+            position: absolute;
+            background-color: silver;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+        .dropdown-content a:hover {
+			background:linear-gradient(15deg, #0091e9 0%,#00487d 100% );
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        @keyframes fillLine {
+            0% { width: 0; }
+            100% { width: 100%; }
+        }
+        .line {
+    width: 0.45vw;
+    height: 7vh;
+    background-color: white;
+    position: relative;
+    margin-left: 10px;
+    overflow: hidden;
+}
+
+.line .fill {
+   
+    width: 100%; 
+    height: 0;
+    animation: none;
+}
+
+button.active + .line .fill {
+    animation: fillWaterVertical 3s ease-out forwards; 
+	color: white;
+}
+
+button.completed + .line .fill {
+    height: 100%;
+    background-color: rgb(14, 15, 16); 
+	color: white;
+}
+
+@keyframes fillWaterVertical {
+    0% {
+        height: 0;
+        background-color: white;
+    }
+    50% {
+        height: 50%;
+        background-color: rgb(41, 44, 45); 
+    }
+    100% {
+        height: 100%;
+        background-color: rgb(6, 7, 7); 
+    }
+}
+    </style>
+</head>
+<body>
+    <div class="button-container">
+        <button type="button" id="walletButton" class="active" data-tooltip="Connect to MetaMask wallet" style="margin-top: 6vh;">🔗 Connect to Wallet</button>
+        <div class="line connect-wallet"><div class="fill"></div></div>
+        <button type="button" id="kycbutton" disabled data-tooltip="Complete your KYC to proceed">📝 Perform KYC</button>
+        <div class="line kyc"><div class="fill"></div></div>
+        <button type="button" id="guide" disabled data-tooltip="Add a blockchain network">🌐 Add Network</button>
+        <div class="line add-network"><div class="fill"></div></div>
+        <button type="button" id="minting" disabled data-tooltip="Mint your own NFT">🎨 Mint NFT</button>
+        <div class="line mint-nft"><div class="fill"></div></div>
+        <button type="button" id="transfer" disabled data-tooltip="your minted NFTs" style="margin-bottom: 6vh;">🖼️ Your NFTs</button>
+    </div>
+
+	<div class="dropdown">
+        <img alt="Profile Picture" id="profilePic" src="profile.jpg">
+        <div class="dropdown-content">
+            <a href="profile.html">My Profile</a>
+         
+            <a href="support.html">Support</a>
+            <a href="registration.html">Registration</a>
+            <a href="login.html" id="logout">Logout</a>
+        </div>
+    </div>
+	
+	<script>
+       
+        let slideIndex = 0;
+        const slides = document.querySelectorAll('.slide');
+
+        function showSlides() {
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[slideIndex].classList.add('active');
+            slideIndex = (slideIndex + 1) % slides.length;
+		}
+        setInterval(showSlides, 4000);
+    </script>
+    <script>
+		  
+		 function getRandomColor() {
+            let color;
+            do {
+                color = '#' + Math.floor(Math.random() * 16777215).toString(16);
+            } while (color === '#000000');
+            return color;
+        }
+
+        function getRandomEmoji() {
+            const emojis = ['🐦', '🐧', '🐴', '🦁', '🐯', '🐘', '🦏', '🐱', '🐈', '🐱', '🐶', '🐕'];
+
+            return emojis[Math.floor(Math.random() * emojis.length)];
+        }
+
+        
+        document.getElementById('profilePic').addEventListener('error', function() {
+            let profilePic = document.getElementById('profilePic');
+            profilePic.style.display = 'none';
+            let randomColorDiv = document.createElement('div');
+            randomColorDiv.id = 'profilePic';
+            randomColorDiv.classList.add('random-color');
+            randomColorDiv.style.backgroundColor = getRandomColor();
+            randomColorDiv.style.width = '50px';
+            randomColorDiv.style.height = '50px';
+            randomColorDiv.style.borderRadius = '50%';
+            randomColorDiv.style.display = 'inline-block';
+            randomColorDiv.style.lineHeight = '50px';
+            randomColorDiv.style.textAlign = 'center';
+            randomColorDiv.style.fontSize = '24px';
+            randomColorDiv.style.color = 'white'; 
+            randomColorDiv.textContent = getRandomEmoji();
+            document.querySelector('.dropdown').insertBefore(randomColorDiv, document.querySelector('.dropdown-content'));
+        });
+        const contractAddress = '0x17F3480f11B3EAc120479779797A1Be4dcefa59F';
+        const contractABI =[
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_cid",
+				"type": "string"
+			}
+		],
+		"name": "addCID",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "approve",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "sender",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			}
+		],
+		"name": "ERC721IncorrectOwner",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "operator",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "ERC721InsufficientApproval",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "approver",
+				"type": "address"
+			}
+		],
+		"name": "ERC721InvalidApprover",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "operator",
+				"type": "address"
+			}
+		],
+		"name": "ERC721InvalidOperator",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			}
+		],
+		"name": "ERC721InvalidOwner",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "receiver",
+				"type": "address"
+			}
+		],
+		"name": "ERC721InvalidReceiver",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "sender",
+				"type": "address"
+			}
+		],
+		"name": "ERC721InvalidSender",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "ERC721NonexistentToken",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			}
+		],
+		"name": "OwnableInvalidOwner",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			}
+		],
+		"name": "OwnableUnauthorizedAccount",
+		"type": "error"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "approved",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "Approval",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "operator",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "bool",
+				"name": "approved",
+				"type": "bool"
+			}
+		],
+		"name": "ApprovalForAll",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "userAddress",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "cid",
+				"type": "string"
+			}
+		],
+		"name": "CIDAdded",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "userAddress",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "idType1",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "idNumber1",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "idType2",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "idNumber2",
+				"type": "string"
+			}
+		],
+		"name": "KYCSubmitted",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_email",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_password",
+				"type": "string"
+			}
+		],
+		"name": "login",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_cid",
+				"type": "string"
+			}
+		],
+		"name": "mintNFT",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "userAddress",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "uniqueId",
+				"type": "uint256"
+			}
+		],
+		"name": "NFTMinted",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "previousOwner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "OwnershipTransferred",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_dob",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_email",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_password",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_phone",
+				"type": "string"
+			}
+		],
+		"name": "register",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "renounceOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "safeTransferFrom",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bytes",
+				"name": "data",
+				"type": "bytes"
+			}
+		],
+		"name": "safeTransferFrom",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "operator",
+				"type": "address"
+			},
+			{
+				"internalType": "bool",
+				"name": "approved",
+				"type": "bool"
+			}
+		],
+		"name": "setApprovalForAll",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_idType1",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_idNumber1",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_idType2",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_idNumber2",
+				"type": "string"
+			}
+		],
+		"name": "submitKYC",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "Transfer",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "transferFrom",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "transferOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "userAddress",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "email",
+				"type": "string"
+			}
+		],
+		"name": "UserLoggedIn",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "userAddress",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "email",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "phone",
+				"type": "string"
+			}
+		],
+		"name": "UserRegistered",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			}
+		],
+		"name": "balanceOf",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_userAddress",
+				"type": "address"
+			}
+		],
+		"name": "getAllCIDs",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "string",
+						"name": "cid",
+						"type": "string"
+					}
+				],
+				"internalType": "struct UserRegistrationAndNFT.CIDData[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "getApproved",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_userAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_index",
+				"type": "uint256"
+			}
+		],
+		"name": "getCID",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_userAddress",
+				"type": "address"
+			}
+		],
+		"name": "getKYC",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "getNFTDetails",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "string",
+						"name": "cid",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "uniqueId",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct UserRegistrationAndNFT.NFTDetails",
+				"name": "",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_userAddress",
+				"type": "address"
+			}
+		],
+		"name": "getUser",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getUserCount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "operator",
+				"type": "address"
+			}
+		],
+		"name": "isApprovedForAll",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "name",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "nftOwners",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "owner",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "ownerOf",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "SALT",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes4",
+				"name": "interfaceId",
+				"type": "bytes4"
+			}
+		],
+		"name": "supportsInterface",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "symbol",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "tokenURI",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+];
+
+$(document).ready(async function() {
+    if (window.ethereum) {
+        window.web3 = new Web3(window.ethereum);
+
+        const accounts = await web3.eth.getAccounts();
+        const userAccount = accounts.length > 0 ? accounts[0] : null;
+        const contract = new web3.eth.Contract(contractABI, contractAddress);
+        $('#kycbutton').prop('disabled', true);
+        $('#guide').prop('disabled', true);
+        $('#minting').prop('disabled', true);
+        $('#transfer').prop('disabled', true);
+
+        if (userAccount) {
+            $('#walletButton').text('Connected 🔗').hover(
+                function() {
+                    $(this).text(userAccount);
+                }, function() {
+                    $(this).text('Connected 🔗');
+                }
+            );
+            $('#kycbutton').prop('disabled', false).addClass('active');
+        } else {
+            $('#walletButton').click(async function() {
+                try {
+                    await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    const newAccounts = await web3.eth.getAccounts();
+                    const newUserAccount = newAccounts[0];
+
+                    if (newUserAccount) {
+                        $('#walletButton').text('Connected 🔗').off('click').hover(
+                            function() {
+                                $(this).text(newUserAccount);
+                            }, function() {
+                                $(this).text('Connected 🔗');
+                            }
+                        );
+
+                        $('#kycbutton').prop('disabled', false).addClass('active');
+                    }
+                } catch (error) {
+                    console.error('Error connecting to MetaMask:', error);
+                }
+            });
+        }
+
+        contract.methods.getKYC(userAccount).call({ from: userAccount })
+            .then(function(result) {
+                const pan = result[0];
+                const panNumber = result[1];
+                const aadhaar = result[2];
+                const aadhaarNumber = result[3];
+
+                if (pan && panNumber && aadhaar && aadhaarNumber) {
+                    $('#kycbutton').addClass('completed');
+                    $('#kycbutton').text('KYC Updated ✔️');
+                    $('.kyc .fill').css('width', '100%');
+                    $('#guide').prop('disabled', false).addClass('active');
+                    $('#minting').prop('disabled', false).addClass('active');   
+                    $('#transfer').prop('disabled', false).addClass('active');
+                    
+                }
+            })
+            .catch(function(error) {
+                console.error('Error fetching KYC data:', error);
+            });
+
+        $('#kycbutton').click(function() {
+            window.location.href = './kyc.html';
+        });
+
+        $('#guide').click(function(){
+            $('#minting').prop('disabled', false).addClass('active');
+            window.location.href = './Guide.html';
+            $('.add-network .fill').css('width', '100%');
+        });
+        $('#minting').click(function(){
+            window.location.href = './mint.html';
+            $('.mint-nft .fill').css('width', '100%');
+        });
+
+        $('#transfer').click(function(){
+            window.location.href = './display.html';
+        });
+
+        $('#logout').click(function() {
+            window.ethereum.request({ method: 'eth_requestAccounts', params: [{ eth_accounts: {} }] }).then(() => {
+                alert('Logged out');
+                window.location.href = './login.html';
+            }).catch(error => {
+                console.error('Error logging out:', error);
+            });
+        });
+    } else {
+        alert('Please install MetaMask!');
+    }
+});
+
+    </script>
+</body>
+</html>

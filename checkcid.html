@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPFS Data Viewer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://i.pinimg.com/originals/c8/61/75/c8617584f5180a47f90de9004ed7afed.gif');
+            margin: 0;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        input[type="text"] {
+            padding: 10px;
+            width: 300px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .content {
+            margin-top: 20px;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            margin-top: 20px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <h1>IPFS Data Viewer</h1>
+    <p>Enter the IPFS CID to view :</p>
+    <input type="text" id="cidInput" placeholder="Enter IPFS CID">
+    <button onclick="viewCID()">View </button>
+
+    <div class="content" id="content"></div>
+
+    <script>
+        function isValidCID(cid) {
+            
+            return cid.startsWith('Qm') && cid.length === 46;
+        }
+
+        function viewCID() {
+            const cid = document.getElementById('cidInput').value;
+            const contentDiv = document.getElementById('content');
+
+    
+            if (isValidCID(cid)) {
+                const url = `https://gateway.pinata.cloud/ipfs/${cid}`;
+                contentDiv.innerHTML = `<p>Loading image from: <a href="${url}" target="_blank">${url}</a></p>`;
+                contentDiv.innerHTML += `<img src="${url}" alt="IPFS Image">`;
+            } else {
+                contentDiv.innerHTML = "<p>Invalid IPFS CID. Please check and try again.</p>";
+            }
+        }
+    </script>
+</body>
+</html>

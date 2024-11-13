@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minting NFTs on Ethereum Using IPFS and Pinata</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            padding: 20px;
+            background-image: url('https://i.pinimg.com/originals/c8/61/75/c8617584f5180a47f90de9004ed7afed.gif');
+            background-attachment: fixed;
+            background-size: cover;
+        }
+        h1, h2, h3 {
+            color: #2196F3;
+        }
+        p{
+            color: white;
+        }
+        ul {
+            color: white;
+            margin-left: 20px;
+        }
+        li{
+            color: white;
+        }
+        code {
+            background-color: black;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+        .security-section {
+            background-color: black;
+            border-left: 6px solid #2196F3;
+            padding: 10px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Minting NFTs on Ethereum Using IPFS and Pinata</h1>
+
+    <h2>Overview</h2>
+    <p>This document provides a detailed guide on how to mint NFTs on the Ethereum blockchain using IPFS for storage, specifically leveraging Pinata Cloud for easy management of your files. It will also discuss the process of creating a CID (Content Identifier) using Pinata and outline the security mechanisms that ensure the integrity of your NFT minting process.</p>
+
+    <h2>1. Minting Process Overview</h2>
+    <p>The process of minting an NFT involves several key steps:</p>
+    <ul>
+        <li>Prepare the digital asset you want to mint.</li>
+        <li>Upload the asset to IPFS via Pinata.</li>
+        <li>Create a CID for the uploaded asset.</li>
+        <li>Mint the NFT on the TokenVault using the CID.</li>
+    </ul>
+
+    <h2>2. Uploading Digital Assets to Pinata</h2>
+    <p>To get started, you’ll need a Pinata account. Once you have an account:</p>
+    <ol>
+        <li>Log in to your Pinata account.</li>
+        <li>Navigate to the "Upload" section.</li>
+        <li>Select the file you want to upload and click "Upload."</li>
+    </ol>
+
+    <h2>3. Creating a CID in Pinata</h2>
+    <p>After your file is uploaded to Pinata, it will generate a CID (Content Identifier) for your asset. This CID is a unique identifier that allows you to reference the content stored on IPFS.</p>
+    <h3>Steps to Obtain a CID:</h3>
+    <ol>
+        <li>Once the file is uploaded, navigate to your files in the Pinata dashboard.</li>
+        <li>Find the uploaded file, and you will see the generated CID next to it.</li>
+        <li>Copy the CID, as you will need it for minting the NFT.</li>
+    </ol>
+</body>
+</html>

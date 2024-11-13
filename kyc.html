@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KYC Verification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://i.pinimg.com/originals/c8/61/75/c8617584f5180a47f90de9004ed7afed.gif');
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: linear-gradient(135deg, #00487d 50%, #0091e9 100%);
+            right:25%;
+            position: relative;
+            
+            padding: 20px;
+            border-radius: 8px;
+           margin-bottom: 3%;
+            max-width: 500px;
+            width: 100%;
+        }
+        h1 {
+            text-align: center;
+            color:white;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: white;
+        }
+        
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        input[type="text"] {
+            width: 31.5vw;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-top: 5px;
+        }
+        button {
+            width: 33vw;
+            padding: 10px;
+            background: linear-gradient(to left, #00487d , #0091e9 );
+            border: none;
+            border-radius: 4px;
+            color: black;
+            font-size: 16px;
+            cursor: pointer;
+            background-attachment: fixed;
+            background-size: cover;
+        }
+        button:hover {
+            background: linear-gradient(to right, #00487d , #0091e9 );
+        }
+    </style>
+    <script src="./web3.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>KYC</h1>
+        <form id="kycForm">
+            <div class="form-group">
+                <label for="idType1">Select ID Type 1:</label>
+                <select id="idType1" name="idType1" required>
+                    <option value="">Select</option>
+                    <option value="PAN">PAN</option>
+                    <option value="Aadhaar">Aadhaar Card</option>
+                    <option value="Driving License">Driving License</option>
+                    <option value="Voter Card">Voter Card</option>
+                </select>
+                <input type="text" id="idNumber1" name="idNumber1" placeholder="Enter ID Number" required>
+            </div>
+            <div class="form-group">
+                <label for="idType2">Select ID Type 2:</label>
+                <select id="idType2" name="idType2" required>
+                    <option value="">Select</option>
+                    <option value="PAN">PAN</option>
+                    <option value="Aadhaar">Aadhaar Card</option>
+                    <option value="Driving License">Driving License</option>
+                    <option value="Voter Card">Voter Card</option>
+                </select>
+                <input type="text" id="idNumber2" name="idNumber2" placeholder="Enter ID Number" required>
+            </div>
+           
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+    <script>
+       let contract;
+	  let contractABI;
+        const web3 = new Web3(window.ethereum);
+        const contractAddress = "0x17F3480f11B3EAc120479779797A1Be4dcefa59F"; 
+		async function loadContract() {
+            const res = await fetch('./abi.json');
+            const contractABI = await res.json();
+            contract = new web3.eth.Contract(contractABI, contractAddress);
+        }
+        window.onload = loadContract;
+
+        function validateIDFormat(idType, idNumber) {
+            let regex;
+            switch (idType) {
+                case 'PAN':
+                    regex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+                    break;
+                case 'Aadhaar':
+                    regex = /^[0-9]{12}$/; 
+                    break;
+                case 'Driving License':
+                    regex = /^[A-Z]{2}[0-9]{2} [0-9]{11}$/; 
+                    break;
+                case 'Voter Card':
+                    regex = /^[A-Z]{3}[0-9]{7}$/; 
+                    break;
+                default:
+                    return false;
+            }
+            return regex.test(idNumber);
+        }
+
+      
+
+        async function submitKYC(event) {
+            event.preventDefault();
+
+            const idType1 = document.getElementById('idType1').value;
+            const idNumber1 = document.getElementById('idNumber1').value;
+            const idType2 = document.getElementById('idType2').value;
+            const idNumber2 = document.getElementById('idNumber2').value;
+
+            if (idType1 === idType2) {
+                alert('Please select two different ID types.');
+                return;
+            }
+
+            if (idNumber1 === idNumber2) {
+                alert('The two ID numbers cannot be the same.');
+                return;
+            }
+
+            if (!validateIDFormat(idType1, idNumber1)) {
+                alert('ID Number 1 format is invalid.');
+                return;
+            }
+
+            if (!validateIDFormat(idType2, idNumber2)) {
+                alert('ID Number 2 format is invalid.');
+                return;
+            }
+
+          
+            if (window.ethereum) {
+                window.web3 = new Web3(window.ethereum);
+                await window.ethereum.enable();
+
+                const accounts = await web3.eth.getAccounts();
+                const userAccount = accounts[0];
+
+            
+
+                contract.methods.submitKYC(idType1, idNumber1, idType2, idNumber2).send({ from: userAccount })
+                .then(function(receipt) {
+                    alert('KYC details submitted successfully');
+                })
+                .catch(function(error) {
+                    alert('Error submitting KYC details: ' + error.message);
+                });
+
+            } else {
+                alert('Please install MetaMask!');
+            }
+        }
+
+        document.getElementById('kycForm').addEventListener('submit', submitKYC);
+    </script>
+</body>
+</html>
